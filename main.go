@@ -8,6 +8,7 @@ import (
 
 	goccyJson "github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -16,10 +17,10 @@ import (
 
 	constantsEntity "github.com/fiber-go-sis-app/internal/entity/constants"
 
-	"github.com/fiber-go-sis-app/utils/pkg/custom"
-	"github.com/fiber-go-sis-app/utils/pkg/databases/elasticsearch"
-	"github.com/fiber-go-sis-app/utils/pkg/databases/postgres"
-	"github.com/fiber-go-sis-app/utils/pkg/jwt"
+	customPkg "github.com/fiber-go-sis-app/utils/pkg/custom"
+	elasticsearchPkg "github.com/fiber-go-sis-app/utils/pkg/databases/elasticsearch"
+	postgresPkg "github.com/fiber-go-sis-app/utils/pkg/databases/postgres"
+	middlewarePkg "github.com/fiber-go-sis-app/utils/pkg/middleware"
 
 	serviceRoutes "github.com/fiber-go-sis-app/routes/services"
 	webRoutes "github.com/fiber-go-sis-app/routes/web"
@@ -34,45 +35,57 @@ var embedDirTemplate embed.FS
 var embedDirStatic embed.FS
 
 func main() {
-	engine := html.NewFileSystem(http.FS(embedDirTemplate), ".html")
-	engine.Reload(true)
-	engine.Debug(true)
-
+	// Initialization App Config
 	app := fiber.New(fiber.Config{
-		Views:        engine,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 3 * time.Second,
 		JSONEncoder:  goccyJson.Marshal,
 		JSONDecoder:  goccyJson.Unmarshal,
 		AppName:      constantsEntity.AppName,
+		Views:        html.NewFileSystem(http.FS(embedDirTemplate), ".html"),
 	})
 
-	// Setting JWT RS256
-	if err := jwt.GenerateJWT(); err != nil {
-		log.Fatalf("rsa.GenerateKey: %v", err)
+	// Load Environment
+	if err := godotenv.Load(); err != nil {
+		panic(err)
 	}
 
 	// Setting basic configuration
 	app.Use(logger.New(), recover.New())
+
+	// Setting static files in .static folder
 	app.Use(constantsEntity.StaticUrl, filesystem.New(filesystem.Config{
 		Root:       http.FS(embedDirStatic),
 		PathPrefix: "static",
 		Browse:     true,
 	}))
 
-	if err := godotenv.Load(); err != nil {
+	app.Use(func(ctx *fiber.Ctx) error {
+		return ctx.Status(fiber.StatusNotFound).SendString("Sorry can't find that!")
+	})
+
+	// Setting key token to encrypt cookie
+	app.Use(encryptcookie.New(encryptcookie.Config{
+		Key: constantsEntity.CookiesKeyToken,
+	}))
+
+	// Setting JWT RS256
+	if err := customPkg.GenerateJWT(); err != nil {
+		log.Fatalf("rsa.GenerateKey: %v", err)
+	}
+
+	// Open Postgres Connection
+	if err := postgresPkg.OpenConnection(); err != nil {
 		panic(err)
 	}
 
-	if err := postgres.OpenConnection(); err != nil {
+	// Open ElasticSearch Connection
+	if err := elasticsearchPkg.NewESClient(); err != nil {
 		panic(err)
 	}
 
-	if err := elasticsearch.NewESClient(); err != nil {
-		panic(err)
-	}
-
-	if err := custom.SetupSchema(); err != nil {
+	// Setup schema if table postgres / index elasticsearch not exists
+	if err := customPkg.SetupSchema(); err != nil {
 		panic(err)
 	}
 
@@ -81,6 +94,8 @@ func main() {
 
 	// Web handler - SIS
 	sisGroup := app.Group("/sis")
+	sisGroup.Use(middlewarePkg.AccessTokenMiddleware(constantsEntity.WebSource))
+	sisGroup.Use(middlewarePkg.RefreshTokenMiddleware(constantsEntity.WebSource))
 	webRoutes.BuildSISRoutes(sisGroup)
 
 	// Service Group

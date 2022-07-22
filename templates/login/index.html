@@ -19,7 +19,7 @@
                 <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
                     <span class="label-input100">Username</span>
                     <input class="input100" type="text" id="user_name" name="user_name"
-                           placeholder="Masukkan username" autocomplete="off">
+                           placeholder="Masukkan username" autocomplete="off" required>
                     <span class="focus-input100"></span>
                 </div>
 
@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="container-login100-form-btn">
-                    <button class="login100-form-btn" onclick="processLogin()">
+                    <button id="btnLogin" class="login100-form-btn" onclick="triggerBtnLogin()">
                         Login
                     </button>
                 </div>
@@ -42,4 +42,11 @@
 </div>
 </body>
 {{ template "templates/login/footer" . }}
+<div class="modal" id="modalLoading" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered d-flex justify-content-center" role="document">
+        <div class="spinner-border" role="status" style="color: white;">
+            <span class="sr-only" style="color: white;">Loading...</span>
+        </div>
+    </div>
+</div>
 </html>

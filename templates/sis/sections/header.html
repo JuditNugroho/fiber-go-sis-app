@@ -6,6 +6,7 @@
     <title>{{ .Title }}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link type="image/png" sizes="96x96" rel="icon" href="{{ .StaticUrl }}/img/favicon.png">
 
     <!-- Load custom css -->
     <link href="{{ .StaticUrl }}/css/utils/sb-admin-2.css" rel="stylesheet">
@@ -18,12 +19,13 @@
     <!-- Load framework css or third party -->
     <link href="{{ .StaticUrl }}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ .StaticUrl }}/vendor/alertifyjs/css/alertify.min.css" rel="stylesheet">
+    <link href="{{ .StaticUrl }}/vendor/sweetalert2/dist/sweetalert2.css" rel="stylesheet">
     <link href="{{ .StaticUrl }}/vendor/alertifyjs/css/themes/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ .StaticUrl }}/vendor/bootstrap-table/dist/bootstrap-table.min.css">
+    <link href="{{ .StaticUrl }}/vendor/jquery-loading-indicator/dist/jquery.loading-indicator.css" type="text/css" rel="stylesheet"/>
 </head>
 
 <body id="page-top">
-{{ template "templates/utils/loading" . }}
 <p style="display: none" id="baseURL">{{ .BaseURL }}</p>
 <!-- Page Wrapper -->
 <div id="wrapper">

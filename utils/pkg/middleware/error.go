@@ -2,21 +2,9 @@ package middleware
 
 import (
 	"github.com/gofiber/fiber/v2"
-	jwtWare "github.com/gofiber/jwt/v3"
-
-	"github.com/fiber-go-sis-app/utils/pkg/jwt"
 
 	constantsEntity "github.com/fiber-go-sis-app/internal/entity/constants"
 )
-
-// Protected protect routes
-func Protected() fiber.Handler {
-	return jwtWare.New(jwtWare.Config{
-		SigningMethod: constantsEntity.JWTMethod,
-		SigningKey:    jwt.GetPrivateKey().Public(),
-		ErrorHandler:  jwtError,
-	})
-}
 
 func jwtError(c *fiber.Ctx, err error) error {
 	if err.Error() == constantsEntity.ErrMissingOrMalformedJWT {

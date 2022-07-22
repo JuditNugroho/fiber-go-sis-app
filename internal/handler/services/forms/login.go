@@ -4,6 +4,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 
+	constantsEntity "github.com/fiber-go-sis-app/internal/entity/constants"
 	formsEntity "github.com/fiber-go-sis-app/internal/entity/forms"
 
 	customPkg "github.com/fiber-go-sis-app/utils/pkg/custom"
@@ -32,6 +33,16 @@ func LoginHandler(ctx *fiber.Ctx) error {
 			"message": err.Error(),
 		})
 	}
+
+	ctx.Cookie(&fiber.Cookie{
+		Name:  constantsEntity.JWTAccessCookiesKey,
+		Value: data.JWTAccessToken,
+	})
+
+	ctx.Cookie(&fiber.Cookie{
+		Name:  constantsEntity.JWTRefreshCookiesKey,
+		Value: data.JWTRefreshToken,
+	})
 
 	return customPkg.BuildJSONRes(ctx, data)
 }

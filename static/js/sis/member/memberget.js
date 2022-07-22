@@ -60,15 +60,20 @@ function initTable() {
     });
 }
 
+async function sendGetMemberRequest() {
+    let baseURL = $('#baseURL').text();
+    const response = await axios.get(baseURL + "svc/dt_members");
+    return response.data
+}
+
 function ajaxRequest(params) {
     let baseURL = $('#baseURL').text();
-    $.ajax({
-        'method': "GET",
-        'url': baseURL + "svc/dt_members",
-        'contentType': 'application/json',
-    }).done(function (data) {
-        $('#table').bootstrapTable('resetView');
-        params.success(data);
+
+    sendGetMemberRequest().then(function (results) {
+        params.success(results);
+    }).catch(function (err) {
+        params.error(err);
+        buildErrorPopup(err.response.data.message);
     });
 }
 

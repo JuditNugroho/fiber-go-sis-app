@@ -8,11 +8,11 @@ import (
 
 func WebSISMemberHandler(ctx *fiber.Ctx) error {
 
-	return ctx.Render("templates/sis/pages/member", constantsEntity.WebData{
-		Title:        constantsEntity.WebSISMemberTitle,
+	return ctx.Render("templates/sis/pages/master/member", constantsEntity.WebData{
 		BaseURL:      constantsEntity.BaseURL,
 		StaticUrl:    constantsEntity.StaticUrl,
-		CurrentURL:   constantsEntity.WebSISMemberURL,
 		LinkPageList: constantsEntity.LinkPageList,
+		CurrentURL:   constantsEntity.WebSISMemberURL,
+		Title:        constantsEntity.WebSISMemberTitle,
 	})
 }

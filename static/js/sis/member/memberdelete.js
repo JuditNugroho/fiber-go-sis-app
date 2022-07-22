@@ -1,15 +1,23 @@
+async function sendDeleteMemberRequest(row) {
+    let baseURL = $('#baseURL').text();
+    const response = await axios({
+        data: row,
+        method: 'POST',
+        url: baseURL + "svc/member/delete",
+    });
+    return response
+}
+
 function deleteMember(row) {
     let baseURL = $('#baseURL').text();
-    $.ajax({
-        type: "POST",
-        async: false,
-        data: JSON.stringify(row),
-        contentType: 'application/json',
-        url: baseURL + "svc/member/delete",
-    }).then(function (res) {
+    let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
+
+    sendDeleteMemberRequest(row).then(function (results) {
         $('#table').bootstrapTable('refresh');
         alertify.success("Data member berhasil dihapus");
-    }).catch(function (a) {
-        alertify.error("Error : " + a.responseText);
+    }).catch(function (err) {
+        buildErrorPopup(err.response.data.message);
+    }).finally(function () {
+        loadingIndicator.hide();
     });
 }

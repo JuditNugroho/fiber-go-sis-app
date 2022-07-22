@@ -8,11 +8,11 @@ import (
 
 func WebSISUserHandler(ctx *fiber.Ctx) error {
 
-	return ctx.Render("templates/sis/pages/user", constantsEntity.WebData{
-		Title:        constantsEntity.WebSISUserTitle,
+	return ctx.Render("templates/sis/pages/master/user", constantsEntity.WebData{
 		BaseURL:      constantsEntity.BaseURL,
 		StaticUrl:    constantsEntity.StaticUrl,
-		CurrentURL:   constantsEntity.WebSISUserURL,
 		LinkPageList: constantsEntity.LinkPageList,
+		CurrentURL:   constantsEntity.WebSISUserURL,
+		Title:        constantsEntity.WebSISUserTitle,
 	})
 }

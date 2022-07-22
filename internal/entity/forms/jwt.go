@@ -1,7 +1,12 @@
 package forms
 
+type JWTTokenKey struct {
+	AccessToken  string
+	RefreshToken string
+}
+
 type JWTRequest struct {
-	UserID string
-	Name   string
-	Admin  bool
+	UserID  string
+	Name    string
+	IsAdmin bool
 }
