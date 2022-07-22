@@ -76,16 +76,12 @@ func main() {
 		panic(err)
 	}
 
-	// Web Group
+	// Web handler login
 	webRoutes.BuildLoginRoutes(app)
 
 	// Web handler - SIS
 	sisGroup := app.Group("/sis")
 	webRoutes.BuildSISRoutes(sisGroup)
-
-	// Web handler - POS
-	posGroup := app.Group("/pos")
-	webRoutes.BuildPOSRoutes(posGroup)
 
 	// Service Group
 	svcGroup := app.Group("/svc")

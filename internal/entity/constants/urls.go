@@ -10,7 +10,3 @@ const WebSISHomeURL = BaseSISURL
 const WebSISUserURL = BaseSISURL + "user"
 const WebSISMemberURL = BaseSISURL + "member"
 const WebSISProductURL = BaseSISURL + "product"
-
-// Web POS Constanta
-
-const WebPOSHomeURL = BasePOSURL

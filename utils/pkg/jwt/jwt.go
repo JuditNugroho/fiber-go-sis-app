@@ -5,8 +5,9 @@ import (
 	"crypto/rsa"
 	"time"
 
-	formEntity "github.com/fiber-go-sis-app/internal/entity/form"
 	"github.com/golang-jwt/jwt/v4"
+
+	formsEntity "github.com/fiber-go-sis-app/internal/entity/forms"
 )
 
 var privateKey *rsa.PrivateKey
@@ -21,7 +22,7 @@ func GetPrivateKey() *rsa.PrivateKey {
 	return privateKey
 }
 
-func CreateJWTToken(req formEntity.JWTRequest) (string, error) {
+func CreateJWTToken(req formsEntity.JWTRequest) (string, error) {
 	// Create the Claims
 	claims := jwt.MapClaims{
 		"user_id": req.UserID,

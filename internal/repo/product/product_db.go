@@ -2,9 +2,10 @@ package product
 
 import (
 	"database/sql"
-	"github.com/fiber-go-sis-app/utils/pkg/databases/postgres"
 
 	"github.com/gofiber/fiber/v2"
+
+	postgresPkg "github.com/fiber-go-sis-app/utils/pkg/databases/postgres"
 
 	productEntity "github.com/fiber-go-sis-app/internal/entity/product"
 )
@@ -17,7 +18,7 @@ const queryGetProductByID = `
 
 func GetProductByID(ctx *fiber.Ctx, productID string) (productEntity.Product, bool, error) {
 	var product productEntity.Product
-	db := postgres.GetPgConn()
+	db := postgresPkg.GetPgConn()
 
 	if err := db.GetContext(ctx.Context(), &product, queryGetProductByID, productID); err != nil {
 		if err == sql.ErrNoRows {
@@ -40,7 +41,7 @@ const queryGetProductByIDOrBarcode = `
 
 func GetProductByIDOrBarcode(ctx *fiber.Ctx, search string) (productEntity.Product, bool, error) {
 	var product productEntity.Product
-	db := postgres.GetPgConn()
+	db := postgresPkg.GetPgConn()
 
 	if err := db.GetContext(ctx.Context(), &product, queryGetProductByIDOrBarcode, search); err != nil {
 		if err == sql.ErrNoRows {
@@ -57,13 +58,10 @@ const insertProduct = `
 `
 
 func InsertProduct(ctx *fiber.Ctx, product productEntity.Product) error {
-	db := postgres.GetPgConn()
+	db := postgresPkg.GetPgConn()
 
 	_, err := db.NamedQueryContext(ctx.Context(), insertProduct, product)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 const updateProduct = `
@@ -81,13 +79,10 @@ const updateProduct = `
 `
 
 func UpdateProduct(ctx *fiber.Ctx, product productEntity.Product) error {
-	db := postgres.GetPgConn()
+	db := postgresPkg.GetPgConn()
 
 	_, err := db.NamedQueryContext(ctx.Context(), updateProduct, product)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 const deleteProduct = `
@@ -96,11 +91,8 @@ const deleteProduct = `
 `
 
 func DeleteProduct(ctx *fiber.Ctx, productID string) error {
-	db := postgres.GetPgConn()
+	db := postgresPkg.GetPgConn()
 
 	_, err := db.ExecContext(ctx.Context(), deleteProduct, productID)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

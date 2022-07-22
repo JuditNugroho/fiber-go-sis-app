@@ -8,7 +8,7 @@ import (
 
 func WebSISUserHandler(ctx *fiber.Ctx) error {
 
-	return ctx.Render("sis/pages/user", constantsEntity.WebData{
+	return ctx.Render("templates/sis/pages/user", constantsEntity.WebData{
 		Title:        constantsEntity.WebSISUserTitle,
 		BaseURL:      constantsEntity.BaseURL,
 		StaticUrl:    constantsEntity.StaticUrl,

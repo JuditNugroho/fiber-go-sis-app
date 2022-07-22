@@ -5,8 +5,6 @@ package constants
 const JWTMethod = "RS256"
 const StaticUrl = "/static"
 const AppName = "fiber-go-sis-app"
-const StaticDirectory = "./static"
-const TemplateDirectory = "./templates"
 const SchemeDirectory = "./utils/schemes/"
 
 // Base constants

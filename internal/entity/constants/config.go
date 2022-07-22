@@ -9,9 +9,6 @@ var LinkPageList = map[string]string{
 	"WebSISUser":    WebSISUserURL,
 	"WebSISMember":  WebSISMemberURL,
 	"WebSISProduct": WebSISProductURL,
-
-	// Web POS Constanta
-	"WebPOSHome": WebPOSHomeURL,
 }
 
 type WebData struct {

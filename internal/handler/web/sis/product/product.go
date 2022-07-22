@@ -8,7 +8,7 @@ import (
 
 func WebProductHandler(ctx *fiber.Ctx) error {
 
-	return ctx.Render("sis/pages/product", constantsEntity.WebData{
+	return ctx.Render("templates/sis/pages/product", constantsEntity.WebData{
 		Title:        constantsEntity.WebSISProductTitle,
 		BaseURL:      constantsEntity.BaseURL,
 		StaticUrl:    constantsEntity.StaticUrl,

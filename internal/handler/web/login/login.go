@@ -8,7 +8,7 @@ import (
 
 func WebLoginHandler(ctx *fiber.Ctx) error {
 
-	return ctx.Render("login/index", constantsEntity.WebData{
+	return ctx.Render("templates/login/index", constantsEntity.WebData{
 		Title:        constantsEntity.WebLoginTitle,
 		BaseURL:      constantsEntity.BaseURL,
 		CurrentURL:   constantsEntity.WebLoginURL,

@@ -7,7 +7,7 @@ import (
 	productEntity "github.com/fiber-go-sis-app/internal/entity/product"
 	customPkg "github.com/fiber-go-sis-app/utils/pkg/custom"
 
-	productUC "github.com/fiber-go-sis-app/internal/usecase/services/product"
+	productUC "github.com/fiber-go-sis-app/internal/usecase/services/products"
 )
 
 // GetDTProductHandler : Get List Of Product for Datatable
