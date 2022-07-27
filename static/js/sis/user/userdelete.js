@@ -1,15 +1,23 @@
+async function sendDeleteUserRequest(row) {
+    let baseURL = $('#baseURL').text();
+    const response = await axios({
+        data: row,
+        method: 'POST',
+        url: baseURL + "svc/user/delete",
+    });
+    return response
+}
+
 function deleteUser(row) {
     let baseURL = $('#baseURL').text();
-    $.ajax({
-        type: "POST",
-        async: false,
-        data: JSON.stringify(row),
-        contentType: 'application/json',
-        url: baseURL + "svc/user/delete",
-    }).then(function (res) {
-        $('#table').bootstrapTable('refresh');
+    let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
+
+    sendDeleteUserRequest(row).then(function (results) {
         alertify.success("Data user berhasil dihapus");
-    }).catch(function (a) {
-        alertify.error("Error : " + a.responseText);
+        $('#table').bootstrapTable('refresh');
+    }).catch(function (err) {
+        buildErrorPopup(err.response.data.message);
+    }).finally(function () {
+        loadingIndicator.hide();
     });
 }

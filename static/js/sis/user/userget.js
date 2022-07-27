@@ -13,9 +13,9 @@ window.eventActions = {
     'click .edit': function (e, value, row, index) {
         editUser(row);
     }, 'click .remove': function (e, value, row, index) {
-        alertify.confirm('Dialog Konfirmasi', 'Apakah anda yakin ingin menghapus data ini?', function () {
+        buildDeleteDataPopup("Apakah anda yakin ingin menghapus data ini?", function () {
             deleteUser(row);
-        }, null).setting({'labels': {ok: 'Ya', cancel: 'Tidak'}});
+        });
     }
 }
 
@@ -74,15 +74,23 @@ function initTable() {
     });
 }
 
+async function sendGetUserRequest() {
+    let baseURL = $('#baseURL').text();
+    const response = await axios.get(baseURL + "svc/dt_users");
+    return response.data
+}
+
 function ajaxRequest(params) {
     let baseURL = $('#baseURL').text();
-    $.ajax({
-        'method': "GET",
-        'url': baseURL + "svc/dt_users",
-        'contentType': 'application/json',
-    }).done(function (data) {
-        $('#table').bootstrapTable('resetView');
-        params.success(data);
+    let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
+
+    sendGetUserRequest().then(function (results) {
+        params.success(results);
+    }).catch(function (err) {
+        params.error(err);
+        buildErrorPopup(err.response.data.message);
+    }).finally(function () {
+        loadingIndicator.hide();
     });
 }
 

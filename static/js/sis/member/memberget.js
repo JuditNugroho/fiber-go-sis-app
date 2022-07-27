@@ -15,7 +15,7 @@ window.eventActions = {
     }, 'click .remove': function (e, value, row, index) {
         buildDeleteDataPopup("Apakah anda yakin ingin menghapus data ini?", function () {
             deleteMember(row);
-        })
+        });
     }
 }
 

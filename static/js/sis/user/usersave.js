@@ -3,7 +3,7 @@ $("#upsertUser").on("click", function (event) {
 
     let param = getParamValue();
     if (param.err !== null) {
-        alertify.alert('Pesan Peringatan', param.err);
+        buildErrorPopup(param.err);
         return
     }
 
@@ -37,20 +37,28 @@ function getParamValue() {
 
 }
 
+async function sendSaveUserRequest(data) {
+    let baseURL = $('#baseURL').text();
+    const response = await axios({
+        data: data,
+        method: 'POST',
+        url: baseURL + "svc/user/upsert",
+    });
+    return response
+}
+
 function saveUser(data) {
     let baseURL = $('#baseURL').text();
-    $.ajax({
-        type: "POST",
-        async: false,
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        url: baseURL + "svc/user/upsert",
-    }).then(function (res) {
+    let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
+
+    sendSaveUserRequest(data).then(function (results) {
         clearFormInput();
         $("#modalUpsert").modal('toggle');
-        alertify.success("Data berhasil disimpan");
+        alertify.success("Data user berhasil disimpan");
         $('#table').bootstrapTable('refresh');
-    }).catch(function (a) {
-        alertify.alert('Pesan Error', a.responseText);
+    }).catch(function (err) {
+        buildErrorPopup(err.response.data.message);
+    }).finally(function () {
+        loadingIndicator.hide();
     });
 }

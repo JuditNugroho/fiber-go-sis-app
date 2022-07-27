@@ -21,9 +21,9 @@ function buildDeleteDataPopup(text, successCallback) {
         showCancelButton: true,
         confirmButtonColor: '#d33',
         confirmButtonText: "Yes",
-    }).then(function (isConfirm) {
-        if (isConfirm) {
-            successCallback()
+    }).then(function (result) {
+        if (result.isConfirmed) {
+            successCallback();
         }
     });
 }
