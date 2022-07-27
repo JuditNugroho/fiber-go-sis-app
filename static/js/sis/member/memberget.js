@@ -13,9 +13,9 @@ window.eventActions = {
     'click .edit': function (e, value, row, index) {
         editMember(row);
     }, 'click .remove': function (e, value, row, index) {
-        alertify.confirm('Dialog Konfirmasi', 'Apakah anda yakin ingin menghapus data ini?', function () {
+        buildDeleteDataPopup("Apakah anda yakin ingin menghapus data ini?", function () {
             deleteMember(row);
-        }, null).setting({'labels': {ok: 'Ya', cancel: 'Tidak'}});
+        })
     }
 }
 
@@ -68,12 +68,15 @@ async function sendGetMemberRequest() {
 
 function ajaxRequest(params) {
     let baseURL = $('#baseURL').text();
+    let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
 
     sendGetMemberRequest().then(function (results) {
         params.success(results);
     }).catch(function (err) {
         params.error(err);
         buildErrorPopup(err.response.data.message);
+    }).finally(function () {
+        loadingIndicator.hide();
     });
 }
 
