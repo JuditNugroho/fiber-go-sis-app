@@ -81,7 +81,6 @@ async function sendGetUserRequest() {
 }
 
 function ajaxRequest(params) {
-    let baseURL = $('#baseURL').text();
     let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
 
     sendGetUserRequest().then(function (results) {

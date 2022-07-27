@@ -3,7 +3,7 @@ $("#upsertProduct").on("click", function (event) {
 
     let param = getParamValue();
     if (param.err !== null) {
-        alertify.alert('Pesan Peringatan', param.err);
+        buildErrorPopup(param.err);
         return
     }
 
@@ -44,20 +44,27 @@ function getParamValue() {
 
 }
 
-function saveProduct(data) {
+async function sendSaveProductRequest(data) {
     let baseURL = $('#baseURL').text();
-    $.ajax({
-        type: "POST",
-        async: false,
-        data: JSON.stringify(data),
-        contentType: 'application/json',
+    const response = await axios({
+        data: data,
+        method: 'POST',
         url: baseURL + "svc/product/upsert",
-    }).then(function (res) {
+    });
+    return response
+}
+
+function saveProduct(data) {
+    let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
+
+    sendSaveProductRequest(data).then(function (results) {
         clearFormInput();
         $("#modalUpsert").modal('toggle');
-        alertify.success("Data berhasil disimpan");
+        alertify.success("Data barang berhasil disimpan");
         $('#table').bootstrapTable('refresh');
-    }).catch(function (a) {
-        alertify.alert('Pesan Error', a.responseText);
+    }).catch(function (err) {
+        buildErrorPopup(err.response.data.message);
+    }).finally(function () {
+        loadingIndicator.hide();
     });
 }

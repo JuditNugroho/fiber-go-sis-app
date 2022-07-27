@@ -15,10 +15,9 @@ window.eventActions = {
         editProduct(row);
     },
     'click .remove': function (e, value, row, index) {
-        alertify.confirm('Dialog Konfirmasi', 'Apakah anda yakin ingin menghapus data ini?',
-            function () {
-                deleteProduct(row);
-            }, null).setting({'labels': {ok: 'Ya', cancel: 'Tidak'}});
+        buildDeleteDataPopup("Apakah anda yakin ingin menghapus data ini?", function () {
+            deleteProduct(row);
+        });
     }
 }
 
@@ -108,8 +107,7 @@ function initTable() {
     });
 }
 
-// your custom ajax request here
-function ajaxRequest(params) {
+async function sendGetProductRequest(params) {
     let page = 1;
     let req = params.data;
     let baseURL = $('#baseURL').text();
@@ -117,18 +115,28 @@ function ajaxRequest(params) {
         page = (params.data["offset"] / params.data["limit"]) + 1
     }
 
-    $.ajax({
-        'method': "GET",
-        'url': baseURL + "svc/dt_products",
-        'contentType': 'application/json',
-        "data": {
+    const response = await axios({
+        method: 'GET',
+        url: baseURL + "svc/dt_products",
+        data: {
             "page": page,
             "limit": req["limit"],
             "search": req["search"],
         },
-    }).done(function (data) {
-        $('#table').bootstrapTable('resetView');
-        params.success(data);
+    });
+    return response.data
+}
+
+function ajaxRequest(params) {
+    let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
+
+    sendGetProductRequest(params).then(function (results) {
+        params.success(results);
+    }).catch(function (err) {
+        params.error(err);
+        buildErrorPopup(err.response.data.message);
+    }).finally(function () {
+        loadingIndicator.hide();
     });
 }
 

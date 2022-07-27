@@ -48,7 +48,6 @@ async function sendSaveUserRequest(data) {
 }
 
 function saveUser(data) {
-    let baseURL = $('#baseURL').text();
     let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
 
     sendSaveUserRequest(data).then(function (results) {

@@ -1,15 +1,22 @@
-function deleteProduct(row) {
+async function sendDeleteProductRequest(row) {
     let baseURL = $('#baseURL').text();
-    $.ajax({
-        type: "POST",
-        async: false,
-        data: JSON.stringify(row),
-        contentType: 'application/json',
+    const response = await axios({
+        data: row,
+        method: 'POST',
         url: baseURL + "svc/product/delete",
-    }).then(function (res) {
-        $('#table').bootstrapTable('refresh');
+    });
+    return response
+}
+
+function deleteProduct(row) {
+    let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
+
+    sendDeleteProductRequest(row).then(function (results) {
         alertify.success("Data barang berhasil dihapus");
-    }).catch(function (a) {
-        alertify.error("Error : " + a.responseText);
+        $('#table').bootstrapTable('refresh');
+    }).catch(function (err) {
+        buildErrorPopup(err.response.data.message);
+    }).finally(function () {
+        loadingIndicator.hide();
     });
 }

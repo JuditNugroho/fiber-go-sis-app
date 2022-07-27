@@ -45,7 +45,6 @@ async function sendSaveMemberRequest(data) {
 }
 
 function saveMember(data) {
-    let baseURL = $('#baseURL').text();
     let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
 
     sendSaveMemberRequest(data).then(function (results) {
