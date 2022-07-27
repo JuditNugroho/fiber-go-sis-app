@@ -42,6 +42,7 @@ func main() {
 		JSONEncoder:  goccyJson.Marshal,
 		JSONDecoder:  goccyJson.Unmarshal,
 		AppName:      constantsEntity.AppName,
+		ErrorHandler: webRoutes.CustomErrorHandler,
 		Views:        html.NewFileSystem(http.FS(embedDirTemplate), ".html"),
 	})
 
@@ -59,10 +60,6 @@ func main() {
 		PathPrefix: "static",
 		Browse:     true,
 	}))
-
-	app.Use(func(ctx *fiber.Ctx) error {
-		return ctx.Status(fiber.StatusNotFound).SendString("Sorry can't find that!")
-	})
 
 	// Setting key token to encrypt cookie
 	app.Use(encryptcookie.New(encryptcookie.Config{
@@ -91,6 +88,7 @@ func main() {
 
 	// Web handler login
 	webRoutes.BuildLoginRoutes(app)
+	webRoutes.BuildError404NotFound(app)
 
 	// Web handler - SIS
 	sisGroup := app.Group("/sis")
