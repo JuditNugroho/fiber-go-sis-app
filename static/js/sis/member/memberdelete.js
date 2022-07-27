@@ -13,8 +13,8 @@ function deleteMember(row) {
     let loadingIndicator = $('body').loadingIndicator().data("loadingIndicator");
 
     sendDeleteMemberRequest(row).then(function (results) {
-        $('#table').bootstrapTable('refresh');
         alertify.success("Data member berhasil dihapus");
+        $('#table').bootstrapTable('refresh');
     }).catch(function (err) {
         buildErrorPopup(err.response.data.message);
     }).finally(function () {
