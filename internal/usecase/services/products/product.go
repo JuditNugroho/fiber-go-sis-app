@@ -65,7 +65,9 @@ func InsertProduct(ctx *fiber.Ctx, product productEntity.Product) error {
 		return err
 	}
 
-	_ = productRepo.UpsertProductES(ctx, product)
+	go func() {
+		_ = productRepo.UpsertProductES(ctx, product)
+	}()
 
 	return nil
 }
@@ -79,7 +81,9 @@ func UpdateProduct(ctx *fiber.Ctx, product productEntity.Product) error {
 		return err
 	}
 
-	_ = productRepo.UpsertProductES(ctx, product)
+	go func() {
+		_ = productRepo.UpsertProductES(ctx, product)
+	}()
 
 	return nil
 }
@@ -93,7 +97,9 @@ func DeleteProduct(ctx *fiber.Ctx, productID string) error {
 		return err
 	}
 
-	_ = productRepo.DeleteProductES(ctx, productID)
+	go func() {
+		_ = productRepo.DeleteProductES(ctx, productID)
+	}()
 
 	return nil
 }
@@ -115,7 +121,9 @@ func UpsertProduct(ctx *fiber.Ctx, product productEntity.Product) error {
 		return err
 	}
 
-	_ = productRepo.UpsertProductES(ctx, product)
+	go func() {
+		_ = productRepo.UpsertProductES(ctx, product)
+	}()
 
 	return nil
 }

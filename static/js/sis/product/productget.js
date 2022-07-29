@@ -23,6 +23,8 @@ window.eventActions = {
 
 function initTable() {
     $('#table').bootstrapTable({
+        fixedNumber: 2,
+        fixedColumns: true,
         locale: $('#locale').val(),
         columns: [
             [
