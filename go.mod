@@ -3,7 +3,6 @@ module github.com/fiber-go-sis-app
 go 1.18
 
 require (
-	github.com/elastic/go-elasticsearch/v7 v7.17.1
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/goccy/go-json v0.9.10
 	github.com/gofiber/fiber/v2 v2.35.0
@@ -13,7 +12,6 @@ require (
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.6
-	github.com/tanimutomo/sqlfile v1.0.0
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
 )
 

@@ -33,7 +33,7 @@ func CreateJWTToken(req formsEntity.JWTRequest) (formsEntity.JWTTokenKey, error)
 		"user_id":  req.UserID,
 		"name":     req.Name,
 		"is_admin": req.IsAdmin,
-		"exp":      time.Now().Add(time.Minute * 2).Unix(),
+		"exp":      time.Now().Add(time.Minute * 30).Unix(),
 	}
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodRS256, accessTokenClaims)
 	jwtTokenKey.AccessToken, err = accessToken.SignedString(privateKey)
@@ -44,7 +44,7 @@ func CreateJWTToken(req formsEntity.JWTRequest) (formsEntity.JWTTokenKey, error)
 	// Create refresh token
 	refreshTokenClaims := jwt.MapClaims{
 		"user_id": req.UserID,
-		"exp":     time.Now().Add(time.Minute * 30).Unix(),
+		"exp":     time.Now().Add(time.Hour * 1).Unix(),
 	}
 	refreshToken := jwt.NewWithClaims(jwt.SigningMethodRS256, refreshTokenClaims)
 	jwtTokenKey.RefreshToken, err = refreshToken.SignedString(privateKey)

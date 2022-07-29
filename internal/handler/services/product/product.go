@@ -10,26 +10,26 @@ import (
 	productUC "github.com/fiber-go-sis-app/internal/usecase/services/products"
 )
 
-// GetDTProductHandler : Get List Of Product for Datatable
-func GetDTProductHandler(ctx *fiber.Ctx) error {
-	page, limit, err := customPkg.BuildPageAndLimit(ctx)
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-	}
-
-	search := ctx.Query("search", "")
-
-	result, err := productUC.GetDTAllProduct(ctx, page, limit, search)
-	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-	}
-
-	return customPkg.BuildDatatableRes(ctx, result.Total, result.Data)
-}
+//// GetDTProductHandler : Get List Of Product for Datatable
+//func GetDTProductHandler(ctx *fiber.Ctx) error {
+//	page, limit, err := customPkg.BuildPageAndLimit(ctx)
+//	if err != nil {
+//		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+//			"message": err.Error(),
+//		})
+//	}
+//
+//	search := ctx.Query("search", "")
+//
+//	result, err := productUC.GetDTAllProduct(ctx, page, limit, search)
+//	if err != nil {
+//		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+//			"message": err.Error(),
+//		})
+//	}
+//
+//	return customPkg.BuildDatatableRes(ctx, result.Total, result.Data)
+//}
 
 // GetProductByIDOrBarcode : Get product data from ID or barcode
 func GetProductByIDOrBarcode(ctx *fiber.Ctx) error {

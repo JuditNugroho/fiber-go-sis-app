@@ -18,7 +18,6 @@ import (
 	constantsEntity "github.com/fiber-go-sis-app/internal/entity/constants"
 
 	customPkg "github.com/fiber-go-sis-app/utils/pkg/custom"
-	elasticsearchPkg "github.com/fiber-go-sis-app/utils/pkg/databases/elasticsearch"
 	postgresPkg "github.com/fiber-go-sis-app/utils/pkg/databases/postgres"
 	middlewarePkg "github.com/fiber-go-sis-app/utils/pkg/middleware"
 
@@ -33,6 +32,10 @@ var embedDirTemplate embed.FS
 // Embed a static directory
 //go:embed static/*
 var embedDirStatic embed.FS
+
+// Embed a schemes' directory
+//go:embed utils/schemes/postgres/*
+var embedSchemaFiles embed.FS
 
 func main() {
 	// Initialization App Config
@@ -76,13 +79,8 @@ func main() {
 		panic(err)
 	}
 
-	// Open ElasticSearch Connection
-	if err := elasticsearchPkg.NewESClient(); err != nil {
-		panic(err)
-	}
-
 	// Setup schema if table postgres / index elasticsearch not exists
-	if err := customPkg.SetupSchema(); err != nil {
+	if err := customPkg.SetupPostgresTable(embedSchemaFiles); err != nil {
 		panic(err)
 	}
 

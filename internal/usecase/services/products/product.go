@@ -9,30 +9,28 @@ import (
 	constantsEntity "github.com/fiber-go-sis-app/internal/entity/constants"
 	productEntity "github.com/fiber-go-sis-app/internal/entity/product"
 
-	customPkg "github.com/fiber-go-sis-app/utils/pkg/custom"
-
-	productRepo "github.com/fiber-go-sis-app/internal/repo/product"
+	productRepo "github.com/fiber-go-sis-app/internal/repo/products"
 )
 
-// GetDTAllProduct : Get List Of Product for Datatable
-func GetDTAllProduct(ctx *fiber.Ctx, page int, limit int, search string) (productEntity.ListProductDataResponse, error) {
-	esLimit, offset := customPkg.BuildOffsetAndLimitES(page, limit)
-
-	products, err := productRepo.GetProductListES(ctx, offset, esLimit, search)
-	if err != nil {
-		return productEntity.ListProductDataResponse{}, err
-	}
-
-	totalProduct, err := productRepo.GetCountProductES(ctx, search)
-	if err != nil {
-		return productEntity.ListProductDataResponse{}, err
-	}
-
-	return productEntity.ListProductDataResponse{
-		Total: totalProduct,
-		Data:  products,
-	}, nil
-}
+//// GetDTAllProduct : Get List Of Product for Datatable
+//func GetDTAllProduct(ctx *fiber.Ctx, page int, limit int, search string) (productEntity.ListProductDataResponse, error) {
+//	esLimit, offset := customPkg.BuildOffsetAndLimitES(page, limit)
+//
+//	products, err := productRepo.GetProductByID(ctx, offset, esLimit, search)
+//	if err != nil {
+//		return productEntity.ListProductDataResponse{}, err
+//	}
+//
+//	totalProduct, err := productRepo.GetCountProductES(ctx, search)
+//	if err != nil {
+//		return productEntity.ListProductDataResponse{}, err
+//	}
+//
+//	return productEntity.ListProductDataResponse{
+//		Total: totalProduct,
+//		Data:  products,
+//	}, nil
+//}
 
 func GetProductByID(ctx *fiber.Ctx, ID string) (productEntity.Product, error) {
 	product, found, err := productRepo.GetProductByID(ctx, ID)
@@ -65,10 +63,6 @@ func InsertProduct(ctx *fiber.Ctx, product productEntity.Product) error {
 		return err
 	}
 
-	go func() {
-		_ = productRepo.UpsertProductES(ctx, product)
-	}()
-
 	return nil
 }
 
@@ -80,11 +74,6 @@ func UpdateProduct(ctx *fiber.Ctx, product productEntity.Product) error {
 	if err := productRepo.UpdateProduct(ctx, product); err != nil {
 		return err
 	}
-
-	go func() {
-		_ = productRepo.UpsertProductES(ctx, product)
-	}()
-
 	return nil
 }
 
@@ -96,10 +85,6 @@ func DeleteProduct(ctx *fiber.Ctx, productID string) error {
 	if err := productRepo.DeleteProduct(ctx, productID); err != nil {
 		return err
 	}
-
-	go func() {
-		_ = productRepo.DeleteProductES(ctx, productID)
-	}()
 
 	return nil
 }
@@ -120,10 +105,6 @@ func UpsertProduct(ctx *fiber.Ctx, product productEntity.Product) error {
 	if err != nil {
 		return err
 	}
-
-	go func() {
-		_ = productRepo.UpsertProductES(ctx, product)
-	}()
 
 	return nil
 }
